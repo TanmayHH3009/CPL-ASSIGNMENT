@@ -1,0 +1,68 @@
+*** file.c ***
+
+This C code defines a function `EvenOrOdd` that takes an integer `a` as input and returns `1` if `a` is even, and `0` if `a` is odd. The `main` function calls `EvenOrOdd` with the value `5`.
+
+Explanation of the `EvenOrOdd` function:
+1. It declares an integer variable `ans` to store the result.
+2. It checks if `a` is even by using the modulo operator `%` to check if `a` divided by `2` leaves no remainder (`a % 2 == 0`).
+3. If `a` is even, it sets `ans` to `1`, indicating that the number is even.
+4. If `a` is odd, it sets `ans` to `0`, indicating that the number is odd.
+5. Finally, it returns `ans`.
+
+The `main` function:
+1. It declares an integer variable `x` and initializes it to `5`.
+2. It calls the `EvenOrOdd` function with `x` as an argument and stores the result in `k`.
+3. The `main` function then returns `0`, indicating successful completion.
+
+Overall, this code correctly determines whether a given number is even or odd and demonstrates a simple use of functions in C.
+
+
+*** output_non_optimized.s ***
+
+
+This assembly code defines two functions, `_EvenOrOdd` and `_main`, for an ARM architecture (based on the use of `w` and `x` registers).
+
+1. `_EvenOrOdd` function:
+   - It takes a single integer argument in register `w0`.
+   - It performs the following operations:
+     - It subtracts `16` from the stack pointer (`sp`) to make space for local variables.
+     - It stores the argument `w0` at `[sp, #12]`.
+     - It loads the argument from `[sp, #12]` into register `w8`.
+     - It divides the value in `w8` by `2` using signed division (`sdiv`) and stores the result in `w9`.
+     - It multiplies `w9` by `2` and stores the result in `w9`.
+     - It subtracts `w9` from `w8` to check if there is a remainder (i.e., if `w8` is odd).
+     - It sets `w8` to `1` if there is a remainder (indicating the number is odd) or `0` if there is no remainder (indicating the number is even).
+     - It stores the result in `[sp, #8]`.
+     - It loads the result from `[sp, #8]` into `w0` and returns.
+
+2. `_main` function:
+   - It subtracts `32` from the stack pointer to make space for local variables and function call context.
+   - It stores the previous frame pointer and return address on the stack (`stp` instruction).
+   - It sets up the frame pointer (`x29`) and stack pointer (`sp`).
+   - It stores `0` in the memory location pointed to by `sp` (presumably for later use).
+   - It loads `5` into `w8` and stores it in `[sp, #8]`.
+   - It loads the value from `[sp, #8]` into `w0` and calls `_EvenOrOdd`.
+   - It stores the return value in `x8`.
+   - It loads the stored value from `[sp]` into `w0` (which seems unnecessary, as it is already stored in `w8`).
+   - It restores the previous frame pointer and return address from the stack (`ldp` instruction).
+   - It adjusts the stack pointer to free the allocated space.
+   - It returns.
+
+This code correctly determines whether a given number is even or odd and demonstrates the use of function calls and stack manipulation in ARM assembly.
+
+
+***  output_optimized.s ***
+
+This assembly code defines two functions, `_EvenOrOdd` and `_main`, for an ARM architecture (based on the use of `w` registers).
+
+1. `_EvenOrOdd` function:
+   - It takes a single integer argument in register `w0`.
+   - It sets register `w8` to `1`.
+   - It performs a bitwise AND operation (`bic`) between the value in `w0` and `w8`. This operation effectively checks if the least significant bit of the input is set (i.e., if the number is odd).
+   - The result is returned in register `w0`.
+
+2. `_main` function:
+   - This is the entry point of the program.
+   - It initializes register `w0` to `0` and immediately returns.
+
+Overall, this code implements a simple check to determine if a given number is even or odd using bitwise operations. If the least significant bit of the input is set, the function returns `1`, indicating the number is odd; otherwise, it returns `0`, indicating the number is even.
